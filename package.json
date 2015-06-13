@@ -1,0 +1,28 @@
+{
+  "name": "form-to-obj",
+  "version": "0.0.1",
+  "description": "Zero dependency helper to serialize a form into a JavaScript object",
+  "main": "form-to-obj.js",
+  "directories": {},
+  "scripts": {
+    "test": "jasmine-node test/*.spec.js",
+    "min": "uglifyjs form-to-obj.js --source-map form-to-obj.min.js.map -m -c -o form-to-obj.min.js && echo 'Minified size' && uglifyjs form-to-obj.js | gzip -9f | wc -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisdavies/form-to-obj"
+  },
+  "keywords": [
+    "forms", "serializing"
+  ],
+  "author": "Chris Davies <ferociousturtle@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisdavies/form-to-obj/issues"
+  },
+  "homepage": "https://github.com/chrisdavies/form-to-obj",
+  "devDependencies": {
+    "jasmine-node": "^1.14.5",
+    "uglify-js": "^2.4.23"
+  }
+}
