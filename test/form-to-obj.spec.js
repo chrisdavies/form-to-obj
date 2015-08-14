@@ -9,11 +9,27 @@ describe('form-to-obj', function () {
     });
 
     var obj = formToObj(form);
-    
+
     expect(Object.keys(obj).length).toBe(1);
     expect(obj.username).toBe('Chris');
   });
-  
+
+  it('Handles contenteditable', function () {
+    var form = new MockForm({
+      fields: [{
+        attrs: {
+          contenteditable: 'true',
+          'data-name': 'yo'
+        },
+        innerHTML: 'Hey!'
+      }]
+    });
+
+    var obj = formToObj(form);
+    expect(Object.keys(obj).length).toBe(1);
+    expect(obj.yo).toBe('Hey!');
+  });
+
   it('Serializes arrays', function () {
     var form = new MockForm({
       fields: [{
@@ -30,11 +46,11 @@ describe('form-to-obj', function () {
     });
 
     var obj = formToObj(form);
-    
+
     expect(Object.keys(obj).length).toBe(1);
     expect(obj.favs).toEqual(['choc', 'vanil']);
   });
-  
+
   it('Does not serialize unchecked inputs', function () {
     var form = new MockForm({
       fields: [{
@@ -51,11 +67,11 @@ describe('form-to-obj', function () {
     });
 
     var obj = formToObj(form);
-    
+
     expect(Object.keys(obj).length).toBe(1);
     expect(obj.favs).toEqual(['vanil']);
   });
-  
+
   it('Serializes only checked radios', function () {
     var form = new MockForm({
       fields: [{
@@ -72,11 +88,11 @@ describe('form-to-obj', function () {
     });
 
     var obj = formToObj(form);
-    
+
     expect(Object.keys(obj).length).toBe(1);
     expect(obj.gender).toEqual('f');
   });
-  
+
   it('Serializes nested objects', function () {
     var form = new MockForm({
       fields: [{
@@ -95,13 +111,35 @@ describe('form-to-obj', function () {
     });
 
     var obj = formToObj(form);
-    
+
     expect(Object.keys(obj).length).toBe(2);
     expect(obj.address.street).toEqual('123 somewhere');
     expect(obj.address.city).toEqual('durham');
     expect(obj.user.auth.username).toEqual('cd');
   });
-  
+
+  it('Ignores fields with no name', function () {
+    var form = new MockForm({
+      fields: [{
+        attrs: {
+          contenteditable: 'true'
+        },
+        innerHTML: 'Hey!'
+      }, {
+        name: 'joe',
+        value: 'shmo',
+        type: 'text'
+      }, {
+        value: 'baz',
+        type: 'text'
+      }]
+    });
+
+    var obj = formToObj(form);
+    expect(Object.keys(obj).length).toBe(1);
+    expect(obj.joe).toBe('shmo');
+  });
+
   it('Serializes arrays', function () {
     var form = new MockForm({
       fields: [{
@@ -120,14 +158,14 @@ describe('form-to-obj', function () {
     });
 
     var obj = formToObj(form);
-    
+
     expect(Object.keys(obj).length).toBe(1);
     expect(obj.user.length).toBe(3);
-    expect(obj.user.map(function (u) { 
+    expect(obj.user.map(function (u) {
       return u.name;
     })).toEqual(['b', 'a', 'c']);
   });
-  
+
 });
 
 function MockInput(name, value, inputType) {
@@ -138,6 +176,14 @@ function MockInput(name, value, inputType) {
 
 function MockForm(args) {
   this.fields = args.fields;
+
+  args.fields.forEach(function (f) {
+    var attrs = f.attrs || {};
+    delete f.attrs;
+    f.getAttribute || (f.getAttribute = function (name) {
+      return attrs[name];
+    });
+  });
 }
 
 MockForm.prototype = {
@@ -145,13 +191,14 @@ MockForm.prototype = {
     var fieldsArr = fields.split(/,/).map(function (s) {
       return s.trim();
     });
-    
+
     if (fieldsArr.indexOf('input') < 0 ||
         fieldsArr.indexOf('select') < 0 ||
-        fieldsArr.indexOf('textarea') < 0) {
-      throw new Error('Expected to select inputs, selects, and textareas');
+        fieldsArr.indexOf('textarea') < 0 ||
+        fieldsArr.indexOf('[contenteditable=true]') < 0) {
+      throw new Error('Expected to select inputs, selects, contenteditable, and textareas');
     }
-    
+
     return this.fields;
   }
 };

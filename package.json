@@ -1,6 +1,6 @@
 {
   "name": "form-to-obj",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Zero dependency helper to serialize a form into a JavaScript object",
   "main": "form-to-obj.js",
   "directories": {},
