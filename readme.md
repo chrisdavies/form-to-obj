@@ -5,6 +5,7 @@ Tiny, zero-dependency, utility to turn a form into a JavaScript object.
 - Zero dependencies
 - Roughly 600 bytes minified and gzipped
 - Handles arrays and nested objects
+- Handles contenteditable
 
 [![Build Status](https://travis-ci.org/chrisdavies/form-to-obj.svg?branch=master)](https://travis-ci.org/chrisdavies/form-to-obj)
 
@@ -74,6 +75,23 @@ When serialized, would produce an object like this:
 
 The sort order is not guaranteed, and the indices don't matter, except as a unique way of identifying a record.
 
+## Contenteditable support
+
+If using a contenteditable item, give it a `data-name` attribute in order to take its `innerHTML` value.
+
+This markup:
+
+```html
+<div contenteditable="true" data-name="whatevz"><span>Hi</span></div>
+```
+
+Would produce an object like this:
+
+```javascript
+{
+  whatevz: '<span>Hi</span>'
+}
+```
 
 ### Browserify
 
