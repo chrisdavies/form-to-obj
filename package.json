@@ -6,7 +6,7 @@
   "directories": {},
   "scripts": {
     "test": "jasmine-node test/*.spec.js",
-    "min": "uglifyjs form-to-obj.js --source-map form-to-obj.min.js.map -m -c -o form-to-obj.min.js && echo 'Minified size' && uglifyjs form-to-obj.js | gzip -9f | wc -c"
+    "min": "uglifyjs form-to-obj.js --source-map form-to-obj.min.js.map -m -c -o form-to-obj.min.js && echo 'Minified size' && cat form-to-obj.min.js | gzip -9f | wc -c"
   },
   "repository": {
     "type": "git",
