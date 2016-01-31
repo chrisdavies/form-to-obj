@@ -42,11 +42,9 @@ function formToObj(form) {
     var lastProp = props.length - 1;
 
     props.reduce(function (obj, prop, i) {
-      if (i === lastProp) {
-        return setProp(obj, prop, val);
-      } else {
-        return setProp(obj, prop, {});
-      }
+      return setProp(obj, prop, i === lastProp
+        ? val
+        : {});
     }, o);
   }
 
