@@ -1,7 +1,7 @@
 {
   "name": "form-to-obj",
   "main": "form-to-obj.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/chrisdavies/form-to-obj",
   "authors": [
     "Chris Davies <ferociousturtle@gmail.com>"
